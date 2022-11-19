@@ -265,3 +265,60 @@ text.replace(pattern, "#"); // "testing: #, #, #" - replace matches with #
 text.split(/\D+/); // ["", "1", "2", "3"] - split string on non-digits
 
 //Boolean values
+let a=4;
+a===4; // true
+let b=3;
+if (a===4) {
+    b=b+1;
+} else {
+    a=a+1;
+}
+
+//following are false - undefined, null, 0, -0, NaN, "", false
+//Everything else is true
+//Not equals !==
+
+//And - &&, Or - ||, Not - !
+//typeof - null returns object
+//null == undefined // true
+//null === undefined // false
+//Undefined - System level, unexpected, or error like absence of value and null - programmer level, intentional, or error like absence of value
+
+//Symbols 
+// JS Object type is unordered collection of properties where each property is a key-value pair
+let strname='string name';
+let symname = Symbol('propname');
+console.log(typeof strname); // string
+console.log(typeof symname); // symbol
+let o ={};
+o[strname] = 1;
+o[symname] = 2; //property with symbol name
+console.log(o[strname]); // 1
+console.log(o[symname]); // 2
+console.log(symname);
+
+//Symbol takes a string argument and can be returned as a string
+let symname1 = Symbol('propname');
+console.log(symname1.toString()); // "Symbol(propname)"
+console.log(Symbol('propname')===Symbol('propname')); // false - symbols are unique
+
+//symbol.for() - returns a symbol from the global symbol registry - returns same value for same string argument
+let symname2 = Symbol.for('propname');
+let symname3 = Symbol.for('propname');
+console.log(symname2===symname3); // true
+
+//Global object
+//Global object is the default object of the global scope - globally defined identifiers 
+//Interpreter starts with global object and then creates a global scope
+//Defined properties include:
+//undefined, infinity, NaN
+//Global functions - eval(), isFinite(), isNaN(), parseFloat(), parseInt(), decodeURI(), decodeURIComponent(), encodeURI(), encodeURIComponent(), escape(), unescape()
+//Constructor functions - Object(), Function(), Boolean(), Symbol(), Error(), EvalError(), InternalError(), RangeError(), ReferenceError(), SyntaxError(), TypeError(), URIError(), Number(), Math(), Date(), String(), RegExp(), Array(), Int8Array(), Uint8Array(), Uint8ClampedArray(), Int16Array(), Uint16Array(), Int32Array(), Uint32Array(), Float32Array(), Float64Array(), Map(), Set(), WeakMap(), WeakSet(), ArrayBuffer(), SharedArrayBuffer(), Atomics(), DataView(), JSON(), Promise(), Generator(),
+//Global objects - globalThis, Infinity, NaN, undefined, eval, isFinite, isNaN, parseFloat, parseInt, decodeURI, decodeURIComponent, encodeURI, encodeURIComponent, escape, unescape, Object, Function, Boolean, Symbol, Error, EvalError, InternalError, RangeError, ReferenceError, SyntaxError, TypeError, URIError, Number, Math, Date, String, RegExp, Array, Int8Array, Uint8Array, Uint8ClampedArray, Int16Array, Uint16Array, Int32Array, Uint32Array, Float32Array, Float64Array, Map, Set, WeakMap, WeakSet, ArrayBuffer, SharedArrayBuffer, Atomics, DataView, JSON, Promise, Generator, GeneratorFunction, AsyncFunction, Reflect, Proxy, Intl, WebAssembly
+
+//Immutable primitive values - string, number, boolean, undefined, null, symbol
+//Mutable reference objects values - object, function, arrays
+s="hello";
+s.toUpperCase(); // "HELLO"
+console.log(s); // "hello" - string is immutable
+
