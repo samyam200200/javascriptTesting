@@ -484,3 +484,122 @@ Number(new Date(2020, 0, 1).toString()) // NaN - valueOf() method returns string
 Number([99]) // 99 - valueOf() method returns array and Number(array) returns NaN - then toString() method is called - which returns "99" and Number("99") returns 99
 
 //Variable declaration and Assignment
+//let and const
+let i;
+let sum; //also on same line let i, sum;
+//assigning initial value
+let message = "hello";
+let e=0.57721, pi=3.14159;
+
+const H0=74; //hubble constant
+const C=299792458; //speed of light
+const AU=1.496E8; //astronomical unit in km
+
+//When to use const - when you know the value will not change or declare eveything with const and then change to let if needed
+for (let i=0; i<10; i++) {
+    let x = i*2;
+    console.log(x);
+}
+
+data=[1,2,3];
+for (const datum of data) {
+    console.log(datum);
+} //Can even use const
+
+//Variable and constant scope
+//let and const are block scoped
+//blocks include if, for, while, switch, try, catch, function, class
+//scope of global variables is the entire program 
+//html script tag - global scope is the entire page
+
+//repeated declarations - let and const - error
+x=1;
+if (x===1){
+    let x=2;
+    console.log(x) //2
+}
+console.log(x)
+//var declarations - global scope
+var data=[];
+//Variables declared within var do not have block scope - scoped to the body of the containing function
+//Var declarations are hoisted to the top of the function body
+
+var x1=1;
+if (x1===1){
+    var x1=2;
+    console.log(x1) //2
+}
+console.log(x1) //2
+//var can be used to declare multiple times for the same variable
+//hoisting - var declarations are hoisted to the top of the function body
+//if initialization is present, the variable is initialized to the value of the initializer
+//if no initialization is present, the variable is initialized to undefined
+
+//Destructoring assignment
+//Destructuring assignment is a special syntax that allows us to “unpack” arrays or objects into a bunch of variables, as sometimes that’s more convenient
+//Array destructuring
+let [j, k, l] = [1, 2, 3]; // j=1, k=2, l=3
+[j, k] = [j+1, k+1]; // j=2, k=3
+[j, k]=[k, j]; // j=3, k=2
+
+//toPolar() function - returns an array of two elements - radius and angle
+function toPolar(x, y) {
+    return [Math.sqrt(x*x+y*y), Math.atan2(y, x)];
+}
+
+//toCartesian() function - returns an array of two elements - x and y
+function toCartesian(r, theta) {
+    return [r*Math.cos(theta), r*Math.sin(theta)];
+}
+
+let [r, theta] = toPolar(1.0, 1.0);
+console.log(r, theta); // 1.4142135623730951 0.7853981633974483
+
+let [x2, y2] = toCartesian(r, theta);
+console.log(x2, y2); // 1 1
+
+let obj={x:1, y:2};
+for (const [key, value] of Object.entries(obj)) {
+    console.log(`${key}: ${value}`);
+}
+
+let [x4, y4]=[1];//x4=1, y4=undefined
+[x, y]=[1, 2, 3];//x=1, y=2
+[, x, , y]=[1, 2, 3, 4];//x=2, y=4
+
+//... for rest elements
+[x, ...y]=[1, 2, 3];//x=1, y=[2, 3]
+
+//nested array
+let [x5, [y5, z5]] = [1, [2, 3], 4]; //x5=1, y5=2, z5=3
+
+//Any iterable object like strings, maps, sets, generators, etc can be destructured
+let [first, ...rest]="Hello"; //first="H", rest=["e", "l", "l", "o"]
+
+let transparent = {r1: 0.0, g: 0.0, b1: 0.0, a: 0.0};
+let {r1, g, b1} = transparent; //r1=0.0, g=0.0, b1=0.0 - Name of the variable must match the name of the property
+console.log(r1, g, b1); // 0 0 0
+
+const {sin, cos, tan}=Math; //sin, cos, tan are functions
+//same as const sin=Math.sin, cos=Math.cos, tan=Math.tan;
+console.log(sin(0.5), cos(0.5), tan(0.5)); // 0.479425538604203 0.8775825618903728 0.5463024898437905
+
+//Same as const cosine = Math.cos, tangent = Math.tan;
+const {cos:cosine, tan:tangent}=Math;
+console.log(cosine(0.5), tangent(0.5)); // 0.8775825618903728 0.5463024898437905
+
+//complex destructuring
+let data2 = [{x6:1, y6:2}, {x6:3, y6:4}];
+let [{x6: x7, y6: y7}, {x6: x8, y6: y8}] = data2;
+console.log(x7, y7, x8, y8); // 1 2 3 4
+
+let data3={p1:[1, 2], p2:[3, 4]};
+let {p1:[x9, y9], p2:[x10, y10]}=data3;
+console.log(x9, y9, x10, y10); // 1 2 3 4
+
+//flip assignment
+let points1=[{x:1, y:2}, {x:3, y:4}];
+let [{x:x11, y:y11}, {x:x12, y:y12}]=points1;
+
+let points2=[{x:x11, y:y11}, {x:x12, y:y12}];
+console.log(points2); // [{x: 1, y: 2}, {x: 3, y: 4}]
