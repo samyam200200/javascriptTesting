@@ -322,3 +322,165 @@ s="hello";
 s.toUpperCase(); // "HELLO"
 console.log(s); // "hello" - string is immutable
 
+//for primitive values are compared by value
+//Strings are treated as equal if they have the same sequence of characters and the same length
+
+//objects are different that primitive values - they are mutable
+o={x:1};
+o.x=2; // o is now {x:2}
+o.y=3; // o is now {x:2, y:3}
+
+a=[1,2,3];
+a[0]=0; // a is now [0,2,3]
+a[3]=4; // a is now [0,2,3,4] //adding a new array element
+
+//Objects are not compared by value - objects are not equal even if they have the same properties
+//Two distinct arrays are not equal even if they have the same elements
+o={x:1};
+p={x:1};
+console.log(o===p); // false
+a = [];
+b=[];
+console.log(a===b); // false
+
+//Objets are called reference types because they are references to a value - compared by reference
+a=[];
+b=a;
+b[0]=1;
+console.log(a); // [1]
+console.log(a===b); // true
+
+a=['a', 'b', 'c'];
+b=[];
+for (let i=0; i<a.length; i++) {
+    b[i]=a[i]; //copying array elements
+}
+let c=Array.from(b); //copies array ES6
+//New copy of array is created
+
+console.log(b===c); // false
+console.log(b===a); // false
+
+function equalArrays(a, b) {
+    if (a === b) return true; //identical arrays
+    if (a.length !== b.length) return false; //different lengths
+    for (let i=0; i<a.length; i++) {
+        if (a[i] !== b[i]) return false; //different elements
+    }
+    return true;
+}
+
+//TYpe conversion
+//Type conversion is the process of converting a value from one type to another
+console.log(10+" objects")   // "10 objects" - string
+console.log("7"*"4") // 28 - number
+console.log("7"*4) // 28 - number
+console.log("7"+4) // "74" - string
+n=1- "x"; // NaN - not a number
+console.log(isNaN(n)); // true
+n + " objects"; // "NaN objects"
+
+//conversions and equality
+//== does not check type
+//=== checks type
+null == undefined // true
+null === undefined // false
+"0" == 0 // true
+0==false // true
+0===false // false
+console.log(0=="") // true
+undefined == false // false - despite undefined is falsey
+
+//Explicit type conversion
+//Number() - converts to number
+//String() - converts to string
+//Boolean() - converts to boolean
+//Object() - converts to object
+//Array() - converts to array
+//Date() - converts to date
+//RegExp() - converts to regular expression
+//Symbol() - converts to symbol
+
+Number("3") // 3
+String(false) // "false"
+Boolean(0) // false
+Boolean([])// true
+//Any other value except null and undefined has toString() method
+
+!!"hello" // true - !! converts to boolean
+!!0 // false
+
+n=17;
+let binary='0b'+n.toString(2); //binary representation = "0b10001"
+let octal='0o'+n.toString(8); //octal representation = "0o21"
+let hex='0x'+n.toString(16); //hexadecimal representation = "0x11"
+
+//toFixed() - returns a string representation of a number with a specified number of digits after the decimal point
+//toExponential() - returns a string representation of a number in exponential notation
+//toPrecision() - returns a string representation of a number with a specified length 
+n=123456.789;
+n.toFixed(0); // "123457"
+n.toFixed(2); // "123456.79"
+n.toFixed(5); // "123456.78900"
+n.toExponential(1); // "1.2e+5"
+n.toExponential(3); // "1.235e+5"
+n.toPrecision(4); // "1.235e+5"
+n.toPrecision(7); // "123456.8"
+n.toPrecision(10); // "123456.7890"
+
+//Number() - converts to number
+Number("123 abcd"); // NaN
+//parseInt() - parses a string and returns an integer
+parseInt("123 abcd"); // 123
+parseFloat(" 3.14 meters"); // 3.14
+parseInt("-12.34"); // -12
+parseInt("0xFF"); // 255
+parseInt("0xff"); // 255
+parseInt("-0xFF"); // -255
+parseFloat(".1"); // 0.1
+parseInt("0.1"); // 0
+parseInt(".1"); // NaN
+parseFloat("$72.47"); // NaN
+
+//parseInt() accepts a second argument - radix - base of the number between 2 and 36
+parseInt("11", 2); // 3 (1*2 + 1*1)
+parseInt("ff", 16); // 255 (15*16 + 15*1)
+parseInt("zz", 36); // 1295 (35*36 + 35*1)
+parseInt("077", 8); // 63 (7*8 + 7*1)
+parseInt("077", 10); // 77  (7*10 + 7*1)
+
+//Object to Primitive Conversions
+//Object to primitive conversions are performed when an object is used in a context where a primitive value is expected
+//prefer-string - returns primite value, prefering a string value
+//prefer-number - returns primite value, prefering a number value
+//no-preference - returns primite value, prefering a default value - all objects prefer number except Date objects which prefer string
+
+//Object to boolean - All objects are converted to true in boolean context
+//Object to string - All objects are converted to string by calling their toString() method - Same rules as type conversion
+//Case operator conversion
+//+ operator performs numeric addition and string concatenation
+//toString() and valueOf() methods are used to convert objects to primitive values
+console.log(({x:1}).toString()); // "[object Object]"
+console.log([1,2,3].toString()); // "1,2,3"
+(function(x) {f(x);}).toString(); // "function(x) {f(x);}"
+let d=new Date(2020, 0, 1);
+console.log(d.toString()); // "Wed Jan 01 2020 00:00:00 GMT+0545 (Nepal Time)"
+
+//toValue - converts to primiive value that represents the object
+d=new Date(2010, 0, 1);
+console.log(d.valueOf()); // 1262283300000
+
+//Object to primite conversion algorithm
+//prefer-string - tries toString() method if the method is defined 
+//js then tries valueOf() method if the method is defined - then conversion fails and TypeError is thrown
+//prefer-number - tries valueOf() method first then toString() method
+//no-preference - date - JS uses prfer-string algorithm, for anyother object JS uses prefer-number algorithm
+
+Number([])  // 0 - tries valueOf() method first then toString() method - valueOf does not result in primitive value so toString is called - which returns empty string "" and Number("") returns 0
+Number([1,2,3]) // NaN - valueOf() method returns array and Number(array) returns NaN - then toString() method is called - which returns "1,2,3" and Number("1,2,3") returns NaN
+Number({}) // NaN - valueOf() method returns object and Number(object) returns NaN - then toString() method is called - which returns "[object Object]" and Number("[object Object]") returns NaN
+Number(new Date(2020, 0, 1)) // 1577836800000 - valueOf() method returns number and Number(number) 
+Number(new Date(2020, 0, 1).toString()) // NaN - valueOf() method returns string and Number(string) returns NaN
+Number([99]) // 99 - valueOf() method returns array and Number(array) returns NaN - then toString() method is called - which returns "99" and Number("99") returns 99
+
+//Variable declaration and Assignment
