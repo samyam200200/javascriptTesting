@@ -35,5 +35,243 @@ let rectangle = {
 };
 
 //Function definition expressions
-let square = function(x) {return x*x};
+// let square = function(x) {return x*x};
 
+let o={x:1, y:{z:3}};
+let a=[o,4,[5,6]];
+console.log(o.x)
+console.log(o.y.z)
+
+a={b:null};
+
+//Conditional Property Access
+//console.log(a.b.c) - this gives Type error as null value do not have properties
+console.log(a.b?.c.d) //this does not give error as ?. is used to check if the value is null or not
+//this is undefined
+//this is known as optional chaining or short circuiting
+a={b:{}};
+//console.log(a.b?.c.d) //this gives typeError for d as c is not defined
+console.log(a.b?.c?.d) //undefined
+
+//This is also possible using ?.[] 
+//a?.[b][c] is same as a?.[b]?.[c] - if the value of a is null or undefined then entire expression evaluates to undefined
+//new only works with constructor
+
+a;
+let index=0;
+try{
+    a[index++]; //throws typeError
+} catch(e){
+    console.log(index) //1 as index is incremented before the error is thrown
+}
+a?.[index++]; //undefined as index is not incremented
+console.log(index) //1 as index is not incremented
+a[index++]//TypeError as cant index undefined
+
+//Invocation Expression
+//f(x,y) - function call expression and x,y is argument list/ expression 
+//Math.max(x,y,z) - Math.max function call  and x,y,z is argument list/ expression
+//a.sort() //a.sort is function there are no arguments
+
+//Function evaluated first and then the result is passed as argument
+//Conditional invocation
+// function square(x, log){
+//     if (log){
+//         log(x)
+//     }
+//     return x*x
+// }
+//It is same as 
+function square(x, log){
+    log?.(x);//call the fucntion if there is one checks if the lefthand is nul or undefined
+    return x*x;
+}
+
+let f=null, x=0;
+try{
+    f(x++) //throws TypeError because f is null
+} catch (e){
+    x //1 as x is incremented before the error is thrown
+}
+console.log(x) //1 as x is incremented before the error is thrown
+f?.(x++) //undefined as x is not incremented
+console.log(x) //1 as x is not incremented
+
+//o.m() Regular property access
+//o?.m() Conditional property access, regular invocation - o is null then undefined is returned
+//o.m?.() Conditional invocation, regular property access - o must not be null or undefined
+
+//Object Creation Expression
+//creates a object amd invokes a function(called as constructor) on it
+new Object();
+//new Point(2,3)
+//Paranthesis can be omitted if there are no arguments
+new Object;
+new Date;
+
+//operator
+//++ - increment pre or post
+//-- - decrement pre or post
+//- - unary negation
+//+ - unary plus and converts to number
+//! - logical not
+//~ - bitwise not
+//typeof - returns the type of the operand
+//delete - deletes a property from an object
+//void - evaluates an expression and returns undefined
+//** - exponentiation
+//*, /, % - multiplication, division, remainder
+//+ concatination
+//<<, >>, >>> - bitwise shift
+//instanceof - checks if an object is an instance of a constructor
+//in - checks if a property is in an object
+//== non-strict equality
+//=== strict equality
+//!= non-strict inequality
+//!== strict inequality
+//& - bitwise and
+//^ - bitwise xor
+//| - bitwise or
+//&& - logical and
+//|| - logical or
+//? : - conditional
+//=, +=, -=, *=, /=, %=, <<=, >>=, >>>=, &=, ^=, |= - assignment
+//?? - nullish coalescing
+//binary operators - takes two expressions
+//unary operators - takes one expression
+//ternary operators - takes three expressions
+
+//Operand and Result type
+//Invocation expressions have higher precedence than property access
+//typeof is highest precedence
+
+//Operator Associativity
+//left to right or right to left
+//left to right - +, -, *, /, %, <<, >>, >>>, <, <=, >, >=, instanceof, in, ==, !=, ===, !==, &, ^, |, &&, ||
+//right to left - =, +=, -=, *=, /=, %=, <<=, >>=, >>>=, &=, ^=, |=, **, ?:
+
+//Order of evaluation
+//Operator Precedence + Operator Associativity 
+
+//1+2 //3
+//1+2*3 //7
+//"1"+"2"//12
+//1+2+"3"//33
+//conversion - Date is usinf toString method and others using valueOf method
+console.log(1+{}) //1[object Object]
+2+null //2 - null converted to 0
+2+undefined //NaN - undefined converted to NaN
+
+//Unary operator
+//+ - converts to number
+console.log(+true) //1
+console.log(+false) //0
+console.log(+null) //0
+console.log(+undefined) //NaN
+console.log(+{}) //NaN
+
+//- - converts to number and negates it
+console.log(-true) //-1
+console.log(-false) //0
+console.log(-null) //0
+console.log(-undefined) //NaN
+
+//Increment
+//++ - pre increment and post increment
+let i=1;
+let j=++i; //i=2, j=2
+console.log(i, j)
+i=1;
+j=i++; //i=2, j=1
+console.log(i, j)
+
+//Relational expressions
+//<, <=, >, >=
+//returns boolean
+//null and undefined are converted to number
+//string is converted to number
+//object is converted to primitive value
+//NaN is not equal to anything including NaN
+//Equality and Inequality operators
+//Strict === and !==
+//Non-strict == and !=
+//Strict equality
+//Different types are always unequal
+//null and undefined are not equal to each other
+//isNaN is used to check if the value is NaN
+//no unicode normalization
+
+//euqality with type conversion
+//null and undefined are equal to each other
+//string and number are converted to number and checked for equality "0"==0 //true
+//"1"==true - true "1" is converted to number using valueOf method
+
+//Comparison operators
+//Type conversion is done before comparison
+//"0"<3 //true
+
+//instanceof operator
+let d=new Date();
+console.log(d instanceof Date) //true
+console.log(d instanceof Object) //true
+console.log(d instanceof Number) //false
+a=[1,2,3];
+console.log(a instanceof Array) //true
+console.log(a instanceof Object) //true
+console.log(a instanceof RegExp) //false
+
+//Falsey - false, null, undefined, 0, NaN, ""
+//Truthy - everything else
+p=null;
+p && p.x //null
+//This is because it evaluates the value on left and if it is falsey then it returns the value on left
+//if it is truthy then it returns the value on right
+o={x:1};
+o && o.x //1
+
+//if (a===b) stop();
+//is same as
+//(a===b) && stop();
+
+//logical or operator
+//value on left is truthy then it returns the value on left
+//value on left is falsey then it returns the value on right
+let maxWidth=null;
+let preferences=null;
+let max = maxWidth || preferences?.maxWidth || 100;
+console.log(max)
+
+//can be used for default values
+function copy(o, p){
+    p = p || {}; //if no object is passed then create a new object
+    console.log(p)
+}
+copy({}, null)
+
+//logical not
+//unary operator
+//converts to boolean and negates it
+//Demorgan's Law
+//! converts the expression to boolean and negates it - true becomes false and false becomes true
+let b=0;
+console.log(!(a&&b) === !a || !b)
+console.log(!(a||b) === !a && !b)
+
+//Assignment operators
+i=0;
+o.x=1;
+//assign and test 
+console.log((a=b)===0) //true
+let k;
+i=j=k=0; //multiple assignment at once
+
+//Assignment with operations
+//+=, -=, *=, /=, %=, <<=, >>=, >>>=, &=, ^=, |=
+//a op= b is same as a = a op b
+i=1
+let data=[1,2,3]
+data[i++] +=2 //data[1]=3
+console.log(data) //[1,4,3]
+console.log(i) //2 - assignment is done after the expression is evaluated
+
+console.log(eval("2+2")) //4
