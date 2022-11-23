@@ -87,12 +87,13 @@ function square(x, log){
     return x*x;
 }
 
-let f=null, x=0;
-try{
-    f(x++) //throws TypeError because f is null
-} catch (e){
-    x //1 as x is incremented before the error is thrown
-}
+//let f=null, x=0;
+//try{
+    //f(x++) //throws TypeError because f is null
+//} catch (e){
+//   x //1 as x is incremented before the error is thrown
+//}
+let x=1;
 console.log(x) //1 as x is incremented before the error is thrown
 f?.(x++) //undefined as x is not incremented
 console.log(x) //1 as x is not incremented
@@ -275,3 +276,109 @@ console.log(data) //[1,4,3]
 console.log(i) //2 - assignment is done after the expression is evaluated
 
 console.log(eval("2+2")) //4
+//eval() returns the same value if not string
+//is string is not valid javascript then it throws syntax error
+//eval("x=1") changes the value of local variable
+//eval("var y=3") declares a local variable
+//eval("function f(){return x+1}"); declares a local function
+//indirect eval - makes the variable global
+const geval = eval;
+x="global"; 
+let y="global";
+function f(){
+    let x="local";
+    eval("x+='changed';"); //direct eval sets the local variable
+    return x;
+}
+function g(){
+    let y="local";
+    geval("y+='changed';"); //indirect eval sets the global variable
+    return y;
+}
+console.log(f(), x) //localchanged global
+console.log(g(), y) //local globalchanged
+//strict mode - local eval with private variable environment 
+//eval is reserved word
+//cannot define new variable or function in local scope
+
+//Conditional ternary operator
+//condition ? expr1 : expr2
+x > 0 ? x : -x //absolute value
+//if condition is true then it returns expr1 else it returns expr2
+let username;
+let greeting = "hello" + (username ? username : "there")
+//if username is null or undefined then it returns "there"
+console.log(greeting) //hellothere
+
+//first defined operator ??
+//short circuiting
+//a??b //if a is not null or undefined then it returns a else it returns b
+//same as 
+//(a!==null && a!==undefined) ? a : b
+//?? alternative to || operator - || returns the first truthy value while ?? returns the first defined value
+max=maxWidth || preferences?.maxWidth || 100;
+
+max = maxWidth ?? preferences?.maxWidth ?? 100;
+//if the first operand is falsy but defined it returns the first operand
+let options = {timeout: 0, title: "", verbose: false, n: null};
+console.log(options.timeout ?? 1000);
+console.log(options.title ?? "Untitled");
+console.log(options.verbose ?? true);
+console.log(options.quiet ?? true);//true - quiet is not defined
+console.log(options.n ?? 0);//0 is falsy but defined
+
+// (a??b)||c //??first, then ||
+// a??(b||c) //|| first, then ??
+// a??b||c //Syntax error
+
+//typeof operator
+//x //typeof x
+//undefined //"undefined"
+//null //"object"
+//boolean //"boolean"
+//number or NaN //"number"
+//anyBigInt //"bigint"
+//string //"string"
+//symbol //"symbol"
+//function //"function"
+//any other object //"object"
+let value="abc";
+let abc=(typeof value==="string") ? "'" + value + "'" : value.toString();
+console.log(abc) //'abc'
+
+//delete operator - unary operator
+o = {x:1, y:2};
+delete o.x;
+"x" in o //false
+
+a=[1,2,3];
+console.log(a[2])
+delete a[2];
+console.log(2 in a) //false  checks for array index
+console.log(a) //[1,2,empty] - 3
+
+//property deleted - property ceases to exist
+//non existing property - returns undefined 
+
+o={x:1, y:2};
+delete o.x; //returns true
+console.log(delete o.x); //property does not exist returns undefined
+console.log(delete o.x); //delete a nonexistent property returns true
+console.log(delete 1); //returns true
+//delete o;//type error in strict mode
+
+
+//await - expects promise object - only within functions with async keyword
+
+//void operator - unary operator
+//define function and returns nothing
+let counter = 0;
+const increment = () => void counter++;
+increment(); //undefined
+console.log(counter) //0/
+
+//comma operator - binary operator
+//evaluates each operand from left to right and returns the value of the last operand
+console.log(i=0, j=1, k=2);
+
+
