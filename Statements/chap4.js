@@ -269,7 +269,7 @@ for (let i=0; i<a.length; i++){
 }
 //can also use break labelname;
 
-let matrix=[[1,2,3],[4,5,6],[7,8,9]];
+let matrix=[[1,2,3],[4,NaN,6],[7,8,9]];
 sum=0;
 success=false;
 
@@ -279,7 +279,7 @@ computeSum : if (matrix) {
         if (!row) break computeSum;
         for (let j=0; j<row.length; j++){
             let cell = row[j];
-            if (!cell) break computeSum;
+            if (!cell) break computeSum; //can be used to break out of nested loops
             sum+=cell;
         }
     }
@@ -288,4 +288,198 @@ computeSum : if (matrix) {
 
 console.log(success, sum);
 
+computeSum1: if (matrix) {
+    for (let i=0; i<matrix.length; i++){
+        let row = matrix[i];
+        if (!row) break computeSum1;
+        for (let j=0; j<row.length; j++){
+            let cell = row[j];
+            if (!cell) break; //only breaks the inner loop
+            sum+=cell;
+        }
+    }
+    success=true;
+}
+
+console.log(success, sum);
+
+
 //continue
+//continue labelname
+//continue with labelname skips to the next iteration of the loop with that labelname
+
+//continue can have different effect depending on where it is used
+//if used in a while loop, it skips the rest of the loop body and goes back to the top of the loop - testing again
+//do while loop - skips the rest of the loop body and goes to bottom for testing again
+//for loop - skips the rest of the loop body and goes to the update (or increment) expression
+//for of or for in loop - starts with the next iteration of the loop
+
+for (let i=0; i<data.length; i++){
+    if (!data[i]) continue; //skip null or undefined values
+    console.log(data[i]);
+}
+
+//return statement
+//return expression
+function square(x) {return x*x} //return statement without expression returns undefined
+console.log(square(2))
+
+//return can be empty - returns undefined
+
+//yield
+//like return statement
+//A generator function that yields a range of integer
+function* range(from, to){
+    for (let i=from; i<=to; i++){
+        yield i;
+    }
+}
+a=range(1,5);
+console.log(a.next().value);
+
+//throw
+//Throw exception 
+//Catch exception
+function factorial(x){
+    //if x is not a number, throw an exception
+    if (x<0) throw new Error("x must be non-negative");
+    let f;
+    for (f=1; x>1; f*=x, x--);//empty statement
+    return f;
+}
+console.log(factorial(4))
+//When exception is thrown JS immediately stops normal execution and jumps to nearest exception handler
+//If no handler is found, the exception is thrown to the caller
+//The exception handler is a try/catch/finally statement
+
+//try catch finally
+try{
+    //code
+    //if exception is thrown, the rest of the try block is skipped
+    //and the catch block is executed
+} catch (e){
+    //code
+    //if no exception is thrown, the catch block is skipped
+    //if an exception is thrown, the catch block is executed
+    //if an exception is thrown, the rest of the try block is skipped
+    //e to refer to the exception object
+    //exception object has a name property that is the name of the exception
+}finally{
+    //code
+    //if an exception is thrown, the finally block is executed
+    //if no exception is thrown, the finally block is executed
+    //finally block is always executed
+    //terminates with end of block or return statement
+    //or break, continue, throw, return
+    //with uncaught exception
+}
+
+try{
+    let n=Number(prompt('Please enter a number'));   
+    let f = factorial(n);
+    alert(n + '! = ' + f);
+}
+catch (ex){
+    alert(ex);
+}
+
+//finally is always executed - even with return statement from try block
+//no catch block can also be done
+//simulate for loop with while loop
+//for (let i=0; i<10; i++) console.log(i);
+// let i=0; //initialize
+// while (i<10){ //condition/test
+//     try{
+//     console.log(i);
+//     }finally{
+//         i++; //increment
+//     }
+// }
+
+//bare exceptions
+//try{
+//    //code
+//} catch{//something went wrong and we don't know what
+//    //return undefined
+//} finally{
+//    //code
+
+//with statement
+//with (object) statement
+//creates a temporary scope with the properties of the object as variable and executes statement within that scope
+//forbidden in strict mode
+//with statement is not recommended - runs significantly slower than normal code
+//with statement is not recommended - makes code difficult to read and maintain
+//document.forms[0].address.value
+// with (document.forms[0]){
+//     name.value="";
+//     address.value="";
+//     email.value="";
+//}//hence repated typing can be avoided
+//same as 
+// let f=document.forms[0];
+// f.name.value="";
+// f.address.value="";
+// f.email.value="";
+//let creates a ordinary variable and not a property of the object
+
+//debugger statement
+//debugger; is used to run the function in debug mode
+//debugger statement is ignored if the debugger is not running
+// function f(o){
+//     if (o===undefined) debugger;//temprary line for debugging
+//     //code
+// }
+
+//use strict
+//use strict directive
+//with statement is forbidden
+//eval and arguments cannot be used as variable names
+//duplicate property names are forbidden
+//octal numbers are forbidden
+//delete cannot be used on variables, functions, or arguments
+//delete cannot be used on nonconfigurable properties
+//delete cannot be used on variables, functions, or arguments
+//delete cannot be used on nonconfigurable properties
+//eval and arguments cannot be used as variable names
+
+//declarations
+//declarations are not statements
+
+//function declaration are used to define function
+function area(r){return Math.PI*r*r;}
+//creates a function object and assigns it to the specified name
+//generator statement - function*
+//async function statement - async function
+
+//class
+//class declaration
+class Circle{
+    constructor(r){
+        this.r=r;
+    }
+    area(){
+        return Math.PI*this.r*this.r;
+    }
+    circumference(){
+        return 2*Math.PI*this.r;
+    }
+}
+//class is not hoisted and cannot use class declaration before it is defined
+
+//import and export
+//module code available in another file
+//import Circle from './circle.js';
+//import {PI, TAU} from './math.js';
+//import {PI as pi, TAU as tau} from './math.js';
+
+//values within a module are private by default and cannot be imported unless they are exported
+//export directive does this 
+//const PI = Math.PI;
+//const TAU = 2*Math.PI;
+//export {PI, TAU};
+
+//export default - when module exports only one value
+//export const TAU = 2*Math.PI;
+//export function magnitude(x,y){return Math.sqrt(x*x+y*y);}
+//export default class Circle{//definition of class Circle}
