@@ -248,3 +248,167 @@ console.log(o.x!==undefined); //false
 console.log(o.y!==undefined); //false
 console.log("x" in o); //true
 console.log("y" in o); //false
+
+//enumerate properties
+//for/in statement iterates over the enumerable properties of an object
+o={x:1, y:2, z:3};
+o.propertyIsEnumerable("toString"); //false
+for (let p in o) console.log(p); //x y z
+
+//checking for only non-inherited properties
+for (let p in o){
+    if (o.hasOwnProperty(p)) console.log(p); //x y z
+}
+
+// Functions that is used to get an array of property names
+console.log(Object.keys(o)); //["x", "y", "z"]
+console.log(Object.getOwnPropertyNames(o)); //["x", "y", "z"]
+console.log(Object.getOwnPropertySymbols(o)); //[]
+console.log(Reflect.ownKeys(o)); //["x", "y", "z"] - returns all property names including non-enumerable and symbol properties
+
+//Property Enumeration Order
+//Object.keys(), Object.getOwnPropertyNames(), and Reflect.ownKeys(), JSON.stringify(), and for/in all return the properties of an object in the same order
+//String properties are listed first and are sorted in ascending order
+//Finally symbol properties are listed and are sorted in order added to object
+
+//Extending Objects
+let target = {x:1}, source={y:2, z:3};
+for(let key of Object.keys(source)){
+    target[key]=source[key];
+}
+console.log(target); //{x:1, y:2, z:3}
+//Object.assign() method copies all enumerable own properties from one or more source objects to a target object
+//extend() function copies all properties from one or more source objects to a target object
+//Object.assign() takes any number of source objects - modifies the first argument and returns it
+o={x:2, y:3, z:3};
+let defaults={x:1, y:2};
+console.log(Object.assign(o, defaults)); //copies all properties from defaults to o
+//replace the value of o.x with the value of defaults.x
+o=Object.assign({}, defaults, o);
+console.log(o)
+p={a:1, b:2, c:3};
+o={...defaults, ...p}; //spread operator
+console.log(o) //{x: 1, y: 2, a: 1, b: 2, c: 3}
+//The spread operator can be used to copy an object
+function merge(target, ...sources){
+    console.log(sources); 
+    // 0: {x: 2, y: 2}
+    // 1: {y: 3, z: 3} - when called below
+    for (let source of sources){//...sources is an array of source objects
+        for (let key of Object.keys(source)){
+            if(!(key in target)){//diffrent that Object.assign()
+                target[key]=source[key];
+            }
+        }
+    }
+    return target;
+}
+console.log(Object.assign({x:1}, {y:2}, {z:3})); //{x:1, y:2, z:3}
+console.log(merge({x:1}, {x:2, y:2}, {y:3, z:3})); //{x:1, y:2, z:3}
+
+//Serializing Objects
+//Object serialization is process of converting an object to a string from which the object can be reconstructed
+//JSON.stringify() method converts a JavaScript value to a JSON string
+//JSON.parse() method parses a JSON string, constructing the JavaScript value or object described by the string
+o={x:1, y:{z:[false, null, ""]}};
+s=JSON.stringify(o);
+console.log(s); //{"x":1,"y":{"z":[false,null,""]}}
+p=JSON.parse(s);
+console.log(p);
+
+//Object, array,  values are converted to JSON strings
+//NaN, Infinity, and -Infinity are converted to null
+//Date objects are converted to ISO
+//FUnction, RegExp, and Error objects are converted to empty objects and cannot be revived
+
+//METHODS IN THE OBJECT CLASS
+s={x:1, y:2}.toString();
+console.log(s); //[object Object]
+
+point={
+    x:1,
+    y:2,
+    toString:function(){return "("+this.x+","+this.y+")";}
+};
+console.log(String(point)); //"(1,2)" - toString() method is called automatically when an object is converted to a string
+console.log(point.toString()); //"(1,2)"
+
+//toLocalString() method converts an object to a string using the locale-specific representation
+//by default, toLocalString() is the same as toString()
+point = {
+    x:1000,
+    y:2000,
+    toLocaleString:function(){return "("+this.x.toLocaleString()+", "+this.y.toLocaleString()+")";}
+}
+console.log(point.toLocaleString()); //"(1,2)"
+
+//valueOf() method returns the primitive value of an object - much like toString() method
+//called when an object is converted to a number or a boolean
+//Some class define valueOf() to return a different value than toString() - for example, Date objects return a number
+point={
+    x:3,
+    y:4,
+    valueOf:function(){return Math.hypot(this.x, this.y);}
+}
+console.log(point.valueOf()); //5
+console.log(point>4); //true - valueOf() method is called automatically when an object is converted to a boolean
+console.log(point<6); //true
+
+//toJSON() object
+point = {
+    x:1,
+    y:2,
+    toString:function(){return "("+this.x+","+this.y+")";},
+    toJSON:function(){return this.toString();}
+};
+
+//JSON.stringify() method calls toJSON() method if it exists
+console.log(JSON.stringify([point])); //["(1,2)"]
+
+//computed property names
+//creating object with specific property names
+const PROPERTY_NAME="p1";
+function computePropertyName(){
+    return "p"+2;
+}
+o={}
+o[PROPERTY_NAME]=1;
+o[computePropertyName()]=2;
+console.log(o); //{p1: 1, p2: 2}
+
+p = {
+    [PROPERTY_NAME]:1,
+    [computePropertyName()]:2
+};
+console.log(p.p1+p.p2); //3
+
+//Symbols as property names
+const extension = Symbol("my extension symbol");
+o = {
+    [extension]: {/*data*/}
+};
+o[extension].data=123;
+console.log(o)
+//symbol are good for property names that are not intended to be accessed directly
+//safe extension mechanism
+//Object.getOwnPropertySymbols() method returns an array of all symbol properties of an object and Reflect.ownKeys() returns all property names including symbol properties
+
+//Spread Operator
+let position={x:1, y:2};
+let dimensions={width:10, height:20};
+let rectangle={...position, ...dimensions};
+console.log(rectangle); //{x: 1, y: 2, width: 10, height: 20}
+rectangle.x+rectangle.y+rectangle.width+rectangle.height; //33
+//Here the properties of posiyion and dimesions are spread out
+o={x:1};
+p={x:0, ...o};
+console.log(p); //{x: 1}
+q={...o, x:2};
+console.log(q); //{x: 2} 
+//... does not spread inherited properties
+o=Object.create({x:1})
+p={...o};
+console.log(p); //{} - no inherited properties
+//n properties spread is O(n) - linear time
+
+//Shorthand Methods
