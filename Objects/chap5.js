@@ -412,3 +412,97 @@ console.log(p); //{} - no inherited properties
 //n properties spread is O(n) - linear time
 
 //Shorthand Methods
+//When a function is assigned to a property of an object, it is called a method
+let square={
+    area:function(){return this.side*this.side;},
+    side:10
+};
+console.log(square.area()); //100
+
+//Shortcuts
+//If a method is defined using the shorthand syntax, the function keyword can be omitted
+square={
+    area(){return this.side*this.side;},
+    side:10 
+};
+console.log(square.area()); //100
+
+const METHOD_NAME="m";
+const symbol=Symbol();
+let weirdMethods={
+    "method with spaces"(x){return x+1;},
+    [METHOD_NAME](x){return x+2;},
+    [symbol](x){return x+3;}
+}
+
+console.log(weirdMethods["method with spaces"](1)); //2
+console.log(weirdMethods[METHOD_NAME](1)); //3
+console.log(weirdMethods[symbol](1)); //4
+
+//Property setters and getters
+//A setter is a method that is called when a property is assigned a value
+//A getter is a method that is called when a property is read
+//these are known as accessor properties - do not have a value but instead have a getter and/or setter function
+//if both setter and getter are defined it is a read-write property
+//if only getter is defined it is a read-only property - cannot be assigned a value
+//if only setter is defined it is a write-only property - attempting to read the property will return undefined
+o={
+    dataProp:123,
+    //acessor property defined as a pair of functions
+    get accessorProp(){return this.dataProp;},
+    set accessorProp(value){this.dataProp=value;}
+}
+
+p={
+    x:1.0,
+    y:1.0,
+
+    get r(){return Math.hypot(this.x, this.y);},
+    set r(newvalue){
+        let oldvalue=Math.hypot(this.x, this.y);
+        let ratio=newvalue/oldvalue;
+        this.x*=ratio;
+        this.y*=ratio;
+    },
+
+    get theta(){return Math.atan2(this.y, this.x);}
+};
+console.log(p.r);
+console.log(p.theta);
+p.r=5;
+console.log(p.x);
+console.log(p.y);
+
+//accessor properties are inherited
+//if a property is defined as a data property, it cannot be redefined as an accessor property
+q=Object.create(p);
+q.x=3;
+q.y=4;
+console.log(q.r);
+console.log(q.theta);
+
+//Sanity checking of property writes and returning different values on each property read
+const serialnum={
+    //this data property holds the next serial number
+    //the _ in the property name indicates that it is intended to be private
+    _n:0,
+    //return the current value and increment it
+    get next(){return this._n++;},
+    //set a new value of n, but only if it is larger than current
+    set next(n){
+        if(n>=this._n) this._n=n;
+        else throw "serial number can only be set to a larger value";
+    }
+}
+console.log(serialnum.next); //0
+console.log(serialnum.next); //1
+serialnum.next=100;
+console.log(serialnum.next); //100
+
+//"magical" behavior of property names
+const random={
+    get octet(){return Math.floor(Math.random()*256);},
+    get uint16(){return Math.floor(Math.random()*65536);},
+    get int16(){return Math.floor(Math.random()*65536)-32768;}
+}
+console.log(random.octet);
